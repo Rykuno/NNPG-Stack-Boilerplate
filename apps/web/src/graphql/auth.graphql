@@ -1,0 +1,32 @@
+fragment Me on User {
+  id
+  username
+  email
+  avatar
+}
+
+query Me {
+  me {
+    ...Me
+  }
+}
+
+mutation Login($data: LoginInput!) {
+  login(data: $data) {
+    accessToken
+    refreshToken
+    user {
+      ...Me
+    }
+  }
+}
+
+mutation Signup($data: SignupInput!) {
+  signup(data: $data) {
+    user {
+      ...Me
+    }
+    accessToken
+    refreshToken
+  }
+}

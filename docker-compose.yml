@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13
+    container_name: db
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - ./apps/db/.env
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - app_network
+  web:
+    container_name: web
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile
+    restart: always
+    ports:
+      - 3000:3000
+    env_file:
+      - ./apps/web/.env
+    networks:
+      - app_network
+  api:
+    container_name: api
+    build:
+      context: .
+      dockerfile: ./apps/api/Dockerfile
+    env_file:
+      - ./apps/api/.compose.env
+    restart: always
+    ports:
+      - 4000:4000
+    networks:
+      - app_network
+
+volumes:
+  postgres:
+    name: poptaro-db-docker
+
+networks:
+  app_network:
+    external: true
