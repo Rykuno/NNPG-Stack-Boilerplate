@@ -21,9 +21,15 @@ const config: Config = {
     sortSchema: true,
   },
   security: {
-    expiresIn: '15s',
+    expiresIn: '14m',
     refreshIn: '7d',
     bcryptSaltOrRound: 10,
+  },
+  s3: {
+    signatureVersion: 'v4',
+    url: `https://${process.env.AWS_S3_BUCKET}.s3.amazonaws.com/`,
+    bucket: process.env.AWS_S3_BUCKET,
+    region: 'us-west-2',
   },
 };
 

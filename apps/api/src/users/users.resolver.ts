@@ -1,11 +1,25 @@
-import { Resolver, Query, Args, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Args,
+  ResolveField,
+  Parent,
+  Mutation,
+} from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CurrentUser } from 'src/common/decorators/currentUser.decorator';
+import { UploadService } from 'src/upload/upload.service';
+import { SignedResponse } from 'src/upload/entities/signedResponse.entity';
+import { UseGuards } from '@nestjs/common';
+import { GqlAuthGuard } from 'src/auth/guards/gql-auth.guard';
 
 @Resolver(() => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly uploadService: UploadService,
+  ) {}
 
   @Query(() => User, { nullable: true })
   async me(@CurrentUser() user: User): Promise<User | null> {
@@ -17,10 +31,14 @@ export class UsersResolver {
     return this.usersService.findOne(id);
   }
 
-  // @Mutation(() => User)
-  // updateUser(@Args('updateUserInput') updateUserInput: UpdateUserInput) {
-  //   return this.usersService.update(updateUserInput.id, updateUserInput);
-  // }
+  @Mutation(() => SignedResponse)
+  @UseGuards(GqlAuthGuard)
+  uploadAvatar(@CurrentUser() currentUser: User) {
+    return this.uploadService.getSignedUrlForPut({
+      fileType: 'jpg',
+      key: `users/${currentUser.id}/avatar`,
+    });
+  }
 
   @ResolveField(() => String)
   avatar(@Parent() user: User) {
