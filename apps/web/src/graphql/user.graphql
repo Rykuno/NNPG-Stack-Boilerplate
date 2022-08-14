@@ -1,0 +1,18 @@
+query User($where: UserWhereUniqueInput!) {
+  user(where: $where) {
+    id
+    avatar
+    username
+    displayName
+    isFollowing
+    followerCount
+    followingCount
+    isMe
+  }
+}
+
+mutation UploadUserAvatar($fileType: String!) {
+  uploadAvatar(fileType: $fileType) {
+    uploadUrl
+  }
+}

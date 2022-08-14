@@ -10,6 +10,7 @@ import { GqlConfigService } from './gql-config.service';
 import { APP_GUARD } from '@nestjs/core';
 import { GqlOptionalAuthGuard } from './auth/guards/gql-optional-auth.gaurd';
 import { UploadModule } from './upload/upload.module';
+import { UserConnectionsModule } from './user-connections/user-connections.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { UploadModule } from './upload/upload.module';
     AuthModule,
     UsersModule,
     UploadModule,
+    UserConnectionsModule,
   ],
   controllers: [],
   providers: [

@@ -30,12 +30,13 @@ type Mutation {
   login(data: LoginInput!): Auth!
   refreshToken(token: JWT!): Token!
   signup(data: SignupInput!): Auth!
-  uploadAvatar: SignedResponse!
+  toggleUserConnection(data: ToggleUserConnectionInput!): UserConnection!
+  uploadAvatar(fileType: String!): SignedResponse!
 }
 
 type Query {
   me: User
-  user(id: String!): User!
+  user(where: UserWhereUniqueInput!): User!
 }
 
 type SignedResponse {
@@ -48,6 +49,10 @@ input SignupInput {
   email: String!
   password: String!
   username: String!
+}
+
+input ToggleUserConnectionInput {
+  followingId: String!
 }
 
 type Token {
@@ -63,8 +68,28 @@ type User {
   createdAt: DateTime!
   displayName: String!
   email: String!
+  followerCount: Int!
+  followingCount: Int!
   id: ID!
+  isFollowing: Boolean!
+  isMe: Boolean!
   updatedAt: DateTime!
   username: String!
   usernameId: String!
+}
+
+type UserConnection {
+  createdAt: DateTime!
+  follower: User!
+  followerId: String!
+  following: User!
+  followingId: String!
+  id: ID!
+  updatedAt: DateTime!
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: String
+  usernameId: String
 }

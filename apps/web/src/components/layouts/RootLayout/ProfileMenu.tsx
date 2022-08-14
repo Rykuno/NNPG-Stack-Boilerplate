@@ -1,6 +1,7 @@
 import { Menu, Avatar, ActionIcon } from "@mantine/core";
 import { useLogout } from "lib/hooks/useLogout";
 import { useMe } from "lib/hooks/useMe";
+import NextLink from "next/link";
 
 export const ProfileMenu = () => {
   const { me } = useMe();
@@ -17,7 +18,9 @@ export const ProfileMenu = () => {
       </Menu.Target>
 
       <Menu.Dropdown>
-        <Menu.Item>Profile</Menu.Item>
+        <NextLink href={`/user/${me?.username}`}>
+          <Menu.Item>Profile</Menu.Item>
+        </NextLink>
         <Menu.Divider />
         <Menu.Label>Danger Zone</Menu.Label>
         <Menu.Item color="red" onClick={logout}>

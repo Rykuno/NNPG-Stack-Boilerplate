@@ -1,0 +1,14 @@
+mutation ToggleUserConnection($data: ToggleUserConnectionInput!) {
+  toggleUserConnection(data: $data) {
+    id
+    follower {
+      id
+      followingCount
+    }
+    following {
+      id
+      followerCount
+      isFollowing
+    }
+  }
+}
