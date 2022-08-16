@@ -46,8 +46,12 @@ services:
         value: poptaro.access.token
       - key: REFRESH_TOKEN
         value: poptaro.refresh.token
-      - key: NODE_ENV
-        value: production
+      - key: AWS_S3_BUCKET
+        value: poptaro
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
 databases:
   - name: db
     plan: free
