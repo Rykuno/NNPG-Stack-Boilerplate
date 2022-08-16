@@ -38,6 +38,9 @@ export class UserWhereInput {
     @Field(() => StringNullableFilter, {nullable:true})
     avatar?: StringNullableFilter;
 
+    @Field(() => StringNullableFilter, {nullable:true})
+    banner?: StringNullableFilter;
+
     @Field(() => UserConnectionsListRelationFilter, {nullable:true})
     following?: UserConnectionsListRelationFilter;
 

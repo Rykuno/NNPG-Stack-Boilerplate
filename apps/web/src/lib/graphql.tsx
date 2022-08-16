@@ -38,7 +38,8 @@ export type Mutation = {
   refreshToken: Token;
   signup: Auth;
   toggleUserConnection: UserConnection;
-  uploadAvatar: SignedResponse;
+  updateUser: User;
+  upload: SignedResponse;
 };
 
 
@@ -62,7 +63,12 @@ export type MutationToggleUserConnectionArgs = {
 };
 
 
-export type MutationUploadAvatarArgs = {
+export type MutationUpdateUserArgs = {
+  data: UpdateUserInput;
+};
+
+
+export type MutationUploadArgs = {
   fileType: Scalars['String'];
 };
 
@@ -102,9 +108,17 @@ export type Token = {
   refreshToken: Scalars['JWT'];
 };
 
+export type UpdateUserInput = {
+  avatar?: InputMaybe<Scalars['String']>;
+  banner?: InputMaybe<Scalars['String']>;
+  displayName?: InputMaybe<Scalars['String']>;
+  username?: InputMaybe<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<Scalars['String']>;
+  banner?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   displayName: Scalars['String'];
   email: Scalars['String'];
@@ -135,26 +149,33 @@ export type UserWhereUniqueInput = {
   usernameId?: InputMaybe<Scalars['String']>;
 };
 
-export type MeFragment = { __typename?: 'User', id: string, username: string, email: string, avatar?: string | null };
+export type MeFragment = { __typename?: 'User', id: string, username: string, displayName: string, email: string, avatar?: string | null };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, email: string, avatar?: string | null } | null };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'User', id: string, username: string, displayName: string, email: string, avatar?: string | null } | null };
 
 export type LoginMutationVariables = Exact<{
   data: LoginInput;
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Auth', accessToken: any, refreshToken: any, user: { __typename?: 'User', id: string, username: string, email: string, avatar?: string | null } } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'Auth', accessToken: any, refreshToken: any, user: { __typename?: 'User', id: string, username: string, displayName: string, email: string, avatar?: string | null } } };
 
 export type SignupMutationVariables = Exact<{
   data: SignupInput;
 }>;
 
 
-export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'Auth', accessToken: any, refreshToken: any, user: { __typename?: 'User', id: string, username: string, email: string, avatar?: string | null } } };
+export type SignupMutation = { __typename?: 'Mutation', signup: { __typename?: 'Auth', accessToken: any, refreshToken: any, user: { __typename?: 'User', id: string, username: string, displayName: string, email: string, avatar?: string | null } } };
+
+export type UploadMutationVariables = Exact<{
+  fileType: Scalars['String'];
+}>;
+
+
+export type UploadMutation = { __typename?: 'Mutation', upload: { __typename?: 'SignedResponse', key: string, uploadUrl: string, url: string } };
 
 export type ToggleUserConnectionMutationVariables = Exact<{
   data: ToggleUserConnectionInput;
@@ -168,14 +189,14 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, avatar?: string | null, username: string, displayName: string, isFollowing: boolean, followerCount: number, followingCount: number, isMe: boolean } };
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, avatar?: string | null, banner?: string | null, username: string, displayName: string, isFollowing: boolean, followerCount: number, followingCount: number, isMe: boolean } };
 
-export type UploadUserAvatarMutationVariables = Exact<{
-  fileType: Scalars['String'];
+export type UpdateUserMutationVariables = Exact<{
+  data: UpdateUserInput;
 }>;
 
 
-export type UploadUserAvatarMutation = { __typename?: 'Mutation', uploadAvatar: { __typename?: 'SignedResponse', uploadUrl: string } };
+export type UpdateUserMutation = { __typename?: 'Mutation', updateUser: { __typename?: 'User', id: string, username: string, usernameId: string, displayName: string, avatar?: string | null, banner?: string | null } };
 
 export type RefreshTokenMutationVariables = Exact<{
   token: Scalars['JWT'];
@@ -188,6 +209,7 @@ export const MeFragmentDoc = gql`
     fragment Me on User {
   id
   username
+  displayName
   email
   avatar
 }
@@ -246,6 +268,22 @@ export function useSignupMutation(baseOptions?: Apollo.MutationHookOptions<Signu
 export type SignupMutationHookResult = ReturnType<typeof useSignupMutation>;
 export type SignupMutationResult = Apollo.MutationResult<SignupMutation>;
 export type SignupMutationOptions = Apollo.BaseMutationOptions<SignupMutation, SignupMutationVariables>;
+export const UploadDocument = gql`
+    mutation Upload($fileType: String!) {
+  upload(fileType: $fileType) {
+    key
+    uploadUrl
+    url
+  }
+}
+    `;
+export function useUploadMutation(baseOptions?: Apollo.MutationHookOptions<UploadMutation, UploadMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadMutation, UploadMutationVariables>(UploadDocument, options);
+      }
+export type UploadMutationHookResult = ReturnType<typeof useUploadMutation>;
+export type UploadMutationResult = Apollo.MutationResult<UploadMutation>;
+export type UploadMutationOptions = Apollo.BaseMutationOptions<UploadMutation, UploadMutationVariables>;
 export const ToggleUserConnectionDocument = gql`
     mutation ToggleUserConnection($data: ToggleUserConnectionInput!) {
   toggleUserConnection(data: $data) {
@@ -274,6 +312,7 @@ export const UserDocument = gql`
   user(where: $where) {
     id
     avatar
+    banner
     username
     displayName
     isFollowing
@@ -294,20 +333,25 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
-export const UploadUserAvatarDocument = gql`
-    mutation UploadUserAvatar($fileType: String!) {
-  uploadAvatar(fileType: $fileType) {
-    uploadUrl
+export const UpdateUserDocument = gql`
+    mutation UpdateUser($data: UpdateUserInput!) {
+  updateUser(data: $data) {
+    id
+    username
+    usernameId
+    displayName
+    avatar
+    banner
   }
 }
     `;
-export function useUploadUserAvatarMutation(baseOptions?: Apollo.MutationHookOptions<UploadUserAvatarMutation, UploadUserAvatarMutationVariables>) {
+export function useUpdateUserMutation(baseOptions?: Apollo.MutationHookOptions<UpdateUserMutation, UpdateUserMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UploadUserAvatarMutation, UploadUserAvatarMutationVariables>(UploadUserAvatarDocument, options);
+        return Apollo.useMutation<UpdateUserMutation, UpdateUserMutationVariables>(UpdateUserDocument, options);
       }
-export type UploadUserAvatarMutationHookResult = ReturnType<typeof useUploadUserAvatarMutation>;
-export type UploadUserAvatarMutationResult = Apollo.MutationResult<UploadUserAvatarMutation>;
-export type UploadUserAvatarMutationOptions = Apollo.BaseMutationOptions<UploadUserAvatarMutation, UploadUserAvatarMutationVariables>;
+export type UpdateUserMutationHookResult = ReturnType<typeof useUpdateUserMutation>;
+export type UpdateUserMutationResult = Apollo.MutationResult<UpdateUserMutation>;
+export type UpdateUserMutationOptions = Apollo.BaseMutationOptions<UpdateUserMutation, UpdateUserMutationVariables>;
 export const RefreshTokenDocument = gql`
     mutation RefreshToken($token: JWT!) {
   refreshToken(token: $token) {

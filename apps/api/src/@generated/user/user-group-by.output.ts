@@ -28,6 +28,9 @@ export class UserGroupBy {
     @Field(() => String, {nullable:true})
     avatar?: string;
 
+    @Field(() => String, {nullable:true})
+    banner?: string;
+
     @Field(() => Date, {nullable:false})
     createdAt!: Date | string;
 

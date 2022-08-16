@@ -27,6 +27,9 @@ export class UserCreateInput {
     @Field(() => String, {nullable:true})
     avatar?: string;
 
+    @Field(() => String, {nullable:true})
+    banner?: string;
+
     @Field(() => UserConnectionsCreateNestedManyWithoutFollowerInput, {nullable:true})
     following?: UserConnectionsCreateNestedManyWithoutFollowerInput;
 

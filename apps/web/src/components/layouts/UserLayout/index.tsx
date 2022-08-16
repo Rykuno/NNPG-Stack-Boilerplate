@@ -6,7 +6,8 @@ import {
   Group,
   Button,
   Container,
-  ActionIcon
+  ActionIcon,
+  Box
 } from "@mantine/core";
 import { useToggleUserConnectionMutation, useUserQuery } from "lib/graphql";
 import { useRouter } from "next/router";
@@ -34,11 +35,9 @@ interface UserLayoutProps {
 
 const image =
   "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80";
-const avatar =
-  "https://images.unsplash.com/photo-1623582854588-d60de57fa33f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=250&q=80";
 
 export const UserLayout = ({ children }: UserLayoutProps) => {
-  const { classes, theme } = useStyles();
+  const { classes } = useStyles();
   const { query } = useRouter();
 
   const { data } = useUserQuery({
@@ -50,15 +49,14 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
     skip: !query?.username
   });
 
-  console.log(data);
-
-  const [toggleConnection, { loading }] = useToggleUserConnectionMutation({
-    variables: {
-      data: {
-        followingId: data?.user?.id as string
+  const [toggleConnection, { loading: toggleConnectionLoading }] =
+    useToggleUserConnectionMutation({
+      variables: {
+        data: {
+          followingId: data?.user?.id as string
+        }
       }
-    }
-  });
+    });
 
   const stats = [
     {
@@ -85,9 +83,9 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
   return (
     <Container size="md">
       <Card withBorder p="xl" radius="md" className={classes.card}>
-        <Card.Section sx={{ backgroundImage: `url(${image})`, height: 200 }} />
+        <Card.Section sx={{ backgroundImage: `url(${data?.user?.banner})`, height: 200 }} />
         <Avatar
-          src={data?.user.avatar || avatar}
+          src={data?.user.avatar}
           size={80}
           radius={80}
           mx="auto"
@@ -98,7 +96,7 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
           {data?.user?.displayName}
         </Text>
         <Text align="center" size="sm" color="dimmed">
-          {data?.user?.username}
+          @{data?.user?.username}
         </Text>
         <Group mt="md" position="center" spacing={30}>
           {items}
@@ -109,6 +107,7 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
               radius="md"
               mt="xl"
               size="md"
+              loading={toggleConnectionLoading}
               color={data?.user?.isFollowing ? "red" : "blue"}
               onClick={() => toggleConnection()}
             >
@@ -124,6 +123,7 @@ export const UserLayout = ({ children }: UserLayoutProps) => {
           )}
         </Group>
       </Card>
+      <Box mt="lg">{children}</Box>
     </Container>
   );
 };

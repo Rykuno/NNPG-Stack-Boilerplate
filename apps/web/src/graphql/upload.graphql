@@ -1,0 +1,7 @@
+mutation Upload($fileType: String!) {
+  upload(fileType: $fileType) {
+    key
+    uploadUrl
+    url
+  }
+}

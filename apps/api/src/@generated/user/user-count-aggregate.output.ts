@@ -27,6 +27,9 @@ export class UserCountAggregate {
     avatar!: number;
 
     @Field(() => Int, {nullable:false})
+    banner!: number;
+
+    @Field(() => Int, {nullable:false})
     createdAt!: number;
 
     @Field(() => Int, {nullable:false})

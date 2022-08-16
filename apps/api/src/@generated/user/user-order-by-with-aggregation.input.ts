@@ -30,6 +30,9 @@ export class UserOrderByWithAggregationInput {
     avatar?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})
+    banner?: keyof typeof SortOrder;
+
+    @Field(() => SortOrder, {nullable:true})
     createdAt?: keyof typeof SortOrder;
 
     @Field(() => SortOrder, {nullable:true})

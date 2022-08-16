@@ -31,7 +31,8 @@ type Mutation {
   refreshToken(token: JWT!): Token!
   signup(data: SignupInput!): Auth!
   toggleUserConnection(data: ToggleUserConnectionInput!): UserConnection!
-  uploadAvatar(fileType: String!): SignedResponse!
+  updateUser(data: UpdateUserInput!): User!
+  upload(fileType: String!): SignedResponse!
 }
 
 type Query {
@@ -63,8 +64,16 @@ type Token {
   refreshToken: JWT!
 }
 
+input UpdateUserInput {
+  avatar: String
+  banner: String
+  displayName: String
+  username: String
+}
+
 type User {
   avatar: String
+  banner: String
   createdAt: DateTime!
   displayName: String!
   email: String!

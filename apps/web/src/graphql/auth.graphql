@@ -1,6 +1,7 @@
 fragment Me on User {
   id
   username
+  displayName
   email
   avatar
 }

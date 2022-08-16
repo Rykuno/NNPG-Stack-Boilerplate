@@ -28,6 +28,9 @@ export class User {
     @Field(() => String, {nullable:true})
     avatar!: string | null;
 
+    @Field(() => String, {nullable:true})
+    banner!: string | null;
+
     @Field(() => [UserConnections], {nullable:true})
     following?: Array<UserConnections>;
 

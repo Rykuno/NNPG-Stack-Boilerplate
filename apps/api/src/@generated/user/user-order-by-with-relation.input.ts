@@ -27,6 +27,9 @@ export class UserOrderByWithRelationInput {
     @Field(() => SortOrder, {nullable:true})
     avatar?: keyof typeof SortOrder;
 
+    @Field(() => SortOrder, {nullable:true})
+    banner?: keyof typeof SortOrder;
+
     @Field(() => UserConnectionsOrderByRelationAggregateInput, {nullable:true})
     following?: UserConnectionsOrderByRelationAggregateInput;
 

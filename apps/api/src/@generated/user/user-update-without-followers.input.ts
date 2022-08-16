@@ -29,6 +29,9 @@ export class UserUpdateWithoutFollowersInput {
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     avatar?: NullableStringFieldUpdateOperationsInput;
 
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    banner?: NullableStringFieldUpdateOperationsInput;
+
     @Field(() => UserConnectionsUpdateManyWithoutFollowerNestedInput, {nullable:true})
     following?: UserConnectionsUpdateManyWithoutFollowerNestedInput;
 

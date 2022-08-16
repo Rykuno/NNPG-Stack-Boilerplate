@@ -25,6 +25,9 @@ export class UserMaxAggregate {
     @Field(() => String, {nullable:true})
     avatar?: string;
 
+    @Field(() => String, {nullable:true})
+    banner?: string;
+
     @Field(() => Date, {nullable:true})
     createdAt?: Date | string;
 

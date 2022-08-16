@@ -2,6 +2,7 @@ query User($where: UserWhereUniqueInput!) {
   user(where: $where) {
     id
     avatar
+    banner
     username
     displayName
     isFollowing
@@ -11,8 +12,13 @@ query User($where: UserWhereUniqueInput!) {
   }
 }
 
-mutation UploadUserAvatar($fileType: String!) {
-  uploadAvatar(fileType: $fileType) {
-    uploadUrl
+mutation UpdateUser($data: UpdateUserInput!) {
+  updateUser(data: $data) {
+    id
+    username
+    usernameId
+    displayName
+    avatar
+    banner
   }
 }

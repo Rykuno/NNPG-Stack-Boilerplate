@@ -29,6 +29,9 @@ export class UserUncheckedUpdateWithoutFollowingInput {
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     avatar?: NullableStringFieldUpdateOperationsInput;
 
+    @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
+    banner?: NullableStringFieldUpdateOperationsInput;
+
     @Field(() => UserConnectionsUncheckedUpdateManyWithoutFollowingNestedInput, {nullable:true})
     followers?: UserConnectionsUncheckedUpdateManyWithoutFollowingNestedInput;
 

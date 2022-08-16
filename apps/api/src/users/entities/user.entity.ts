@@ -18,6 +18,9 @@ export class User extends BaseEntity {
   @Field()
   avatar?: string;
 
+  @Field()
+  banner?: string;
+
   displayName: string;
 
   @HideField()

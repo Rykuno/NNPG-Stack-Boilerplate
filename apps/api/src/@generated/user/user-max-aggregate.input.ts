@@ -26,6 +26,9 @@ export class UserMaxAggregateInput {
     avatar?: true;
 
     @Field(() => Boolean, {nullable:true})
+    banner?: true;
+
+    @Field(() => Boolean, {nullable:true})
     createdAt?: true;
 
     @Field(() => Boolean, {nullable:true})

@@ -26,6 +26,9 @@ export class UserCreateWithoutFollowingInput {
     @Field(() => String, {nullable:true})
     avatar?: string;
 
+    @Field(() => String, {nullable:true})
+    banner?: string;
+
     @Field(() => UserConnectionsCreateNestedManyWithoutFollowingInput, {nullable:true})
     followers?: UserConnectionsCreateNestedManyWithoutFollowingInput;
 
